@@ -8,6 +8,8 @@ NAMENODE_HOSTNAME=`hostname`
 HOST_FILE=/etc/hosts
 HADOOP_DATANODE_FILE="$HADOOP_PREFIX/etc/hadoop/slaves"
 CORE_SITE_FILE="$HADOOP_PREFIX/etc/hadoop/core-site.xml"
+SSH_DIR="/root/.ssh"
+SSH_COPY_ID_SCRIPT="/root/ssh-copy-id.sh"
 
 echo "----- Configuring $NAMENODE_HOSTNAME[$NAMENODE_IP] -----"
 
@@ -17,7 +19,6 @@ echo "127.0.0.1  localhost localhost.localdomain localhost4 localhost4.localdoma
 echo "$NAMENODE_IP $NAMENODE_HOSTNAME" >> $HOST_FILE
 
 # Add public/private key specific for NameNode
-SSH_DIR="/root/.ssh"
 sudo cp ${VAGRANT_INSTALL_ROOT}/templates/ssh/* "$SSH_DIR/"
 chmod 600 "$SSH_DIR/id_rsa_hadoop"
 chmod 644 "$SSH_DIR/id_rsa_hadoop.pub"
@@ -29,7 +30,6 @@ if ! grep -q "hadoop" "$SSH_DIR/config"; then
 fi
 
 # Remove script if exists
-SSH_COPY_ID_SCRIPT="/root/ssh-copy-id.sh"
 sudo rm -f "$SSH_COPY_ID_SCRIPT"
 echo -e "# Run this script to copy the id_rsa public keys to the DataNodes." >> "$SSH_COPY_ID_SCRIPT"
 
@@ -56,7 +56,8 @@ do
 	fi
 	
     # Add script to ssh-copy the Name Node's public key over to the Data Nodes.
-    # This will copy the created public key not the key from the template directory.
+    # This will copy the generated public key. This is only optional because the
+    # public key from the template directory should already be authorized.
 	SSH_COPY_COMMAND="ssh-copy-id -i /root/.ssh/id_rsa.pub root@$DATANODE"
 	echo "$SSH_COPY_COMMAND" >> "$SSH_COPY_ID_SCRIPT"
     
