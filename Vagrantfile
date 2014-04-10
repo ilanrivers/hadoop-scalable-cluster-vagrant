@@ -1,13 +1,13 @@
-require 'rbconfig'
-
-# Vagrant version
-VAGRANTFILE_API_VERSION = "2"
+###############################################################################################
+# Virtual Environment Configuration                                                           #
+###############################################################################################
 
 # The URL of the vagrant box
 BOX_URL = "https://vagrantcloud.com/chef/centos-6.5/version/1/provider/virtualbox.box"
 
-# Number of Data Nodes
-HADOOP_DATA_NODES = 3
+# Number of Data Nodes to create. 
+# To run single-node mode set HADOOP_DATA_NODES to 0
+HADOOP_DATA_NODES = 2
 
 # Namenode will get IP address "X.X.X.50" if using the example below
 # Datanodes will get IP addresses "X.X.X.51"..."X.X.X.52" and so on.
@@ -22,9 +22,9 @@ HADOOP_NAME_NODE_PREFIX = "HadoopNameNode"
 HADOOP_DATA_NODE_PREFIX = "HadoopDataNode"
 
 ###############################################################################################
-# Vagrant configuration                                                                       #
+# Vagrant configuration (Only change below this line if really necessary)                     #
 ###############################################################################################
-Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
+Vagrant.configure("2") do |config|
 
     config.vm.box = "chef/centos-6.5"
     config.vm.box_url = BOX_URL
