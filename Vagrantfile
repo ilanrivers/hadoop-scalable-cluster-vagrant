@@ -31,11 +31,14 @@ Vagrant.configure("2") do |config|
   
     config.vm.provider :virtualbox do |vb|
         vb.customize ["modifyvm", :id, "--memory", "512"]
-        vb.customize ["modifyvm", :id, "--cpus", "2"]
+        vb.customize ["modifyvm", :id, "--cpus", "1"]
         vb.customize ["modifyvm", :id, "--hwvirtex", "on"]
         vb.customize ["modifyvm", :id, "--nestedpaging", "on"]
-
-        # needed when using the box and the openvpn at the same time
+        
+        # Limit the max amount of cpu usage than can be used.
+        vb.customize ["modifyvm", :id, "--cpuexecutioncap", "75"]
+        
+        # Needed when using the box and the openvpn at the same time
         vb.customize ["modifyvm", :id, "--natdnshostresolver1", "on"]
     end
   
