@@ -8,13 +8,13 @@ export VAGRANT_HADOOP_DOWNLOAD_URL='http://apache.mirror.hostmeester.nl/hadoop/c
 if [ ! -d "$VAGRANT_INSTALL_CACHE" ]; then
 	echo "Creating Cache DIR : $VAGRANT_INSTALL_CACHE"
     mkdir "$VAGRANT_INSTALL_CACHE"
-	chmod 0777 "$VAGRANT_INSTALL_CACHE"
+    chmod 0777 "$VAGRANT_INSTALL_CACHE"
 fi
 
 if [ ! -d "$VAGRANT_CACHE" ]; then
-	echo "Creating Cache DIR : $VAGRANT_CACHE"
+    echo "Creating Cache DIR : $VAGRANT_CACHE"
     mkdir "$VAGRANT_CACHE"
-	chmod 0777 "$VAGRANT_CACHE"
+    chmod 0777 "$VAGRANT_CACHE"
 fi
 
 # Change root password

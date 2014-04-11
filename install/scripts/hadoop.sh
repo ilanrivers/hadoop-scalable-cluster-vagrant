@@ -3,14 +3,14 @@
 # Check if we have already downloaded the tar.
 if [ ! -d "/usr/local/hadoop" ]; then
 	
-	if [ -f "$VAGRANT_CACHE/hadoop-2.3.0.tar.gz" ]; then
-		sh ${VAGRANT_INSTALL_ROOT}/scripts/hadoop_install.sh
-	else
-		echo "Downloading HADOOP"
+    if [ -f "$VAGRANT_CACHE/hadoop-2.3.0.tar.gz" ]; then
+        sh ${VAGRANT_INSTALL_ROOT}/scripts/hadoop_install.sh
+    else
+        echo "Downloading HADOOP"
         cd "$VAGRANT_CACHE"
-		wget "$VAGRANT_HADOOP_DOWNLOAD_URL"
-		sh ${VAGRANT_INSTALL_ROOT}/scripts/hadoop_install.sh
-	fi
+        wget "$VAGRANT_HADOOP_DOWNLOAD_URL"
+        sh ${VAGRANT_INSTALL_ROOT}/scripts/hadoop_install.sh
+    fi
 	
 fi
 

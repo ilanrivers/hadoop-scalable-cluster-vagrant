@@ -39,27 +39,27 @@ echo "localhost" > $HADOOP_DATANODE_FILE
 
 for (( i=1; i<=DATANODE_COUNT; i++ ))
 do
-	DATANODE="$DATANODE_HOSTNAME_PREFIX$i"
-	DATANODE_IP="$IP_PREFIX$i"
-	echo "-- Checking DataNode $DATANODE[$DATANODE_IP] --"
+    DATANODE="$DATANODE_HOSTNAME_PREFIX$i"
+    DATANODE_IP="$IP_PREFIX$i"
+    echo "-- Checking DataNode $DATANODE[$DATANODE_IP] --"
 	
-	# Check if NameNode can find DataNode
-	if ! grep -q "$DATANODE" "$HOST_FILE"; then
-		echo "-- Adding $DATANODE to NameNode $HOST_FILE..."
-		echo "$DATANODE_IP $DATANODE $DATANODE" >> $HOST_FILE
-	fi
+    # Check if NameNode can find DataNode
+    if ! grep -q "$DATANODE" "$HOST_FILE"; then
+        echo "-- Adding $DATANODE to NameNode $HOST_FILE..."
+        echo "$DATANODE_IP $DATANODE $DATANODE" >> $HOST_FILE
+    fi
 	
-	# Check if DataNode is registered as DataNode
-	if ! grep -q "$DATANODE" "$HADOOP_DATANODE_FILE"; then
-		echo "-- Adding $DATANODE as DataNode to $HADOOP_DATANODE_FILE..."
-		echo "$DATANODE" >> $HADOOP_DATANODE_FILE
-	fi
+    # Check if DataNode is registered as DataNode
+    if ! grep -q "$DATANODE" "$HADOOP_DATANODE_FILE"; then
+        echo "-- Adding $DATANODE as DataNode to $HADOOP_DATANODE_FILE..."
+        echo "$DATANODE" >> $HADOOP_DATANODE_FILE
+    fi
 	
     # Add script to ssh-copy the Name Node's public key over to the Data Nodes.
     # This will copy the generated public key. This is only optional because the
     # public key from the template directory should already be authorized.
-	SSH_COPY_COMMAND="ssh-copy-id -i /root/.ssh/id_rsa.pub root@$DATANODE"
-	echo "$SSH_COPY_COMMAND" >> "$SSH_COPY_ID_SCRIPT"
+    SSH_COPY_COMMAND="ssh-copy-id -i /root/.ssh/id_rsa.pub root@$DATANODE"
+    echo "$SSH_COPY_COMMAND" >> "$SSH_COPY_ID_SCRIPT"
     
 done
 

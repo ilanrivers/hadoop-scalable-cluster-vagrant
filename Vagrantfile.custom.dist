@@ -1,0 +1,13 @@
+###############################################################################################
+# Custom Environment Configuration                                                            #
+###############################################################################################
+
+# DataNodes
+@HADOOP_DATA_NODES = 0
+
+# Custom configuration
+Vagrant.configure("2") do |config|
+    config.vm.provider :virtualbox do |vb|
+        vb.customize ["modifyvm", :id, "--memory", "1024"]
+    end
+end

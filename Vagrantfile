@@ -7,19 +7,19 @@ BOX_URL = "https://vagrantcloud.com/chef/centos-6.5/version/1/provider/virtualbo
 
 # Number of Data Nodes to create. 
 # To run single-node mode set HADOOP_DATA_NODES to 0
-HADOOP_DATA_NODES = 2
+@HADOOP_DATA_NODES = 1
 
-# Namenode will get IP address "X.X.X.50" if using the example below
-# Datanodes will get IP addresses "X.X.X.51"..."X.X.X.52" and so on.
-HADOOP_IP_BLOCK = "192.168.33.5"
+# NameNode will get IP address "X.X.X.50" if using the example below.
+# DataNodes will get IP addresses "X.X.X.51"..."X.X.X.52" and so on.
+@HADOOP_IP_PREFIX = "192.168.50.5"
 
 # Host name of the NameNode
 # If you change this name you also have to change it in the hadoop templates.
-HADOOP_NAME_NODE_PREFIX = "HadoopNameNode"
+@HADOOP_NAME_NODE_PREFIX = "HadoopNameNode"
 
 # Hostname prefix for the DataNodes, a digit will be appended to the name for each data node
 # Example hostnames: HadoopDataNode1, HadoopDataNode2 etc.
-HADOOP_DATA_NODE_PREFIX = "HadoopDataNode"
+@HADOOP_DATA_NODE_PREFIX = "HadoopDataNode"
 
 ###############################################################################################
 # Vagrant configuration (Only change below this line if really necessary)                     #
@@ -39,8 +39,8 @@ Vagrant.configure("2") do |config|
         vb.customize ["modifyvm", :id, "--natdnshostresolver1", "on"]
     end
   
-    @MASTER_HOSTNAME = "#{HADOOP_NAME_NODE_PREFIX}"
-    @MASTER_IP_ADDRESS = "#{HADOOP_IP_BLOCK}0"
+    @MASTER_HOSTNAME = "#{@HADOOP_NAME_NODE_PREFIX}"
+    @MASTER_IP_ADDRESS = "#{@HADOOP_IP_PREFIX}0"
   
     config.vm.define "HadoopNameNode" do |hnn|
 
@@ -48,29 +48,29 @@ Vagrant.configure("2") do |config|
         hnn.vm.hostname = @MASTER_HOSTNAME
         hnn.vm.synced_folder "~", "/user_home", :mount_options ["ro"]
 		
-		# DataNode specific provisioning
-		hnn.vm.provision :shell,
-			path: "install/scripts/hadoop_install_name_node.sh",
-			binary: false,
-			args: "#{HADOOP_DATA_NODE_PREFIX} #{HADOOP_DATA_NODES} #{HADOOP_IP_BLOCK}"
+        # DataNode specific provisioning
+        hnn.vm.provision :shell,
+            path: "install/scripts/hadoop_install_name_node.sh",
+            binary: false,
+            args: "#{@HADOOP_DATA_NODE_PREFIX} #{@HADOOP_DATA_NODES} #{@HADOOP_IP_PREFIX}"
             
         hnn.vm.provision :shell,
             inline: "echo -e \"\n-------------- #{@MASTER_HOSTNAME} up and running @ #{@MASTER_IP_ADDRESS} --------------\n\""
     end
   
-    (1..HADOOP_DATA_NODES).each do |i|
+    (1..@HADOOP_DATA_NODES).each do |i|
   
         config.vm.define "HadoopDataNode#{i}" do |hdn|
 		
-            @IP_ADDRESS = "#{HADOOP_IP_BLOCK}#{i}"
-            @HOST_NAME = "#{HADOOP_DATA_NODE_PREFIX}#{i}"
+            @IP_ADDRESS = "#{@HADOOP_IP_PREFIX}#{i}"
+            @HOST_NAME = "#{@HADOOP_DATA_NODE_PREFIX}#{i}"
 
             hdn.vm.network :private_network, ip: @IP_ADDRESS
             hdn.vm.hostname = @HOST_NAME
             
             hdn.vm.synced_folder "~", "/user_home", :mount_options ["ro"]
  
-			# DataNode specific provisioning
+            # DataNode specific provisioning
             hdn.vm.provision :shell,
                 path: "install/scripts/hadoop_install_data_node.sh",
                 binary: true,
@@ -83,11 +83,12 @@ Vagrant.configure("2") do |config|
         
     end
 
-	# Do global provisioning
+    # Do global provisioning
     config.vm.provision :shell,
         path: "install/install.sh"
         
 end
 
-custom_vagrantfile = 'Vagrantfile.local'
-load custom_vagrantfile if File.exist?(custom_vagrantfile)
+# Local configuration. Can be used to override default settings.
+localConfig = 'Vagrantfile.custom'
+load localConfig if File.exist?(localConfig)
