@@ -71,4 +71,4 @@ fi
 
 # Create start script
 echo "-- Creating Run-Once script..."
-echo -e "hdfs namenode -format" >> "/root/hdfs-run-once.sh"
+echo -e "hdfs namenode -format" > "/root/hdfs-run-once.sh"

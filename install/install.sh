@@ -2,7 +2,7 @@ export VAGRANT_ROOT=/vagrant
 export VAGRANT_CACHE=/vagrant/cache
 export VAGRANT_INSTALL_ROOT=$VAGRANT_ROOT/install
 export VAGRANT_INSTALL_CACHE=/home/vagrant/cache
-export VAGRANT_HADOOP_DOWNLOAD_URL='http://apache.mirror.hostmeester.nl/hadoop/common/hadoop-2.3.0/hadoop-2.3.0.tar.gz'
+export VAGRANT_HADOOP_DOWNLOAD_URL='http://ftp.nluug.nl/internet/apache/hadoop/common/hadoop-2.7.0/hadoop-2.7.0.tar.gz'
 
 # Check for cache directory
 if [ ! -d "$VAGRANT_INSTALL_CACHE" ]; then
